@@ -23,11 +23,11 @@
 # SOFTWARE.
 
 from datetime import datetime
-import xml.etree.ElementTree
 
 import requests
 
 from .exceptions import HTTPError
+import defusedxml.ElementTree
 
 
 def _get(pypi_server):
@@ -40,9 +40,9 @@ def _get(pypi_server):
         raise HTTPError(status_code=response.status_code,
                         reason=response.reason)
     if hasattr(response.content, 'decode'):
-        tree = xml.etree.ElementTree.fromstring(response.content.decode())
+        tree = defusedxml.ElementTree.fromstring(response.content.decode())
     else:
-        tree = xml.etree.ElementTree.fromstring(response.content)
+        tree = defusedxml.ElementTree.fromstring(response.content)
     channel = tree.find('channel')
     return channel.findall('item')
 
