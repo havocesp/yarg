@@ -25,9 +25,8 @@
 from datetime import datetime
 import xml.etree.ElementTree
 
-import requests
-
 from .exceptions import HTTPError
+from security import safe_requests
 
 
 def _get(pypi_server):
@@ -35,7 +34,7 @@ def _get(pypi_server):
     Query the PyPI RSS feed and return a list
     of XML items.
     """
-    response = requests.get(pypi_server)
+    response = safe_requests.get(pypi_server)
     if response.status_code >= 300:
         raise HTTPError(status_code=response.status_code,
                         reason=response.reason)
